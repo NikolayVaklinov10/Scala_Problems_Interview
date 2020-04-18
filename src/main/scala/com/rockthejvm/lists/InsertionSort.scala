@@ -153,6 +153,7 @@ object InsertionSort extends App {
     val ordering = Ordering.fromLessThan[Int](_ < _)
 
 
+
     // insertion sort
     println(anUnorderedList.sorted(ordering))
     println(aLargeList.sample(10).sorted(ordering))
