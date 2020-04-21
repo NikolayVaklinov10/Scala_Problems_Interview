@@ -154,8 +154,6 @@ object InsertionSort extends App {
 
 
 
-
-
     // insertion sort
     println(anUnorderedList.sorted(ordering))
     println(aLargeList.sample(10).sorted(ordering))
