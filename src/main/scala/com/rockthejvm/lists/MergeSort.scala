@@ -149,6 +149,24 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     reverseTailrec(this, RNil)
   }
 
+  // append another list
+  def ++[S >: T](anotherList: RList[S]): RList[S] = {
+    /*
+      [1,2,3] ++ [4,5] = concatTailrec([4,5], [3,2,1])
+      = concatTailrec([5], [4,3,2,1])
+      = concatTailrec([], [5,4,3,2,1])
+      = [5,4,3,2,1]
+      Complexity: O(M + N)
+      length of this list = N
+      length of the other list = M
+     */
+    def concatTailrec(remainingList: RList[S], acc: RList[S]): RList[S] = {
+      if (remainingList.isEmpty) acc
+      else concatTailrec(remainingList.tail, remainingList.head :: acc)
+    }
+    concatTailrec(anotherList, this.reverse).reverse
+  }
+
 
 
 }
