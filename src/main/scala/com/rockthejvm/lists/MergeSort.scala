@@ -38,6 +38,9 @@ sealed abstract class RList[+T] {
   // random sample
   def sample(k: Int): RList[T]
 
+  // merge sort
+  def mergeSort[S >: T](ordering: Ordering[S]): RList[S]
+
 }
 
 case object RNil extends RList[Nothing]{
@@ -70,6 +73,9 @@ case object RNil extends RList[Nothing]{
 
   // random samples
   override def sample(k: Int): RList[Nothing] = RNil
+
+  // merge sort
+  override def mergeSort[S >: Nothing](ordering: Ordering[S]): RList[S] = RNil
 }
 
 case class ::[+T](override val head: T, override val tail: RList[T]) extends RList[T]{
@@ -160,12 +166,55 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
       length of this list = N
       length of the other list = M
      */
+    @tailrec
     def concatTailrec(remainingList: RList[S], acc: RList[S]): RList[S] = {
       if (remainingList.isEmpty) acc
       else concatTailrec(remainingList.tail, remainingList.head :: acc)
     }
     concatTailrec(anotherList, this.reverse).reverse
   }
+
+  // merge sort
+  override def mergeSort[S >: T](ordering: Ordering[S]): RList[S] = {
+    /*
+    merge([1,3], [2,4,5,6,7], []) =
+      merge([3], [2,4,5,6,7], [1]) =
+      merge([3], [4,5,6,7], [2,1]) =
+      merge([], [4,5,6,7], [3,2,1]) =
+      [1,2,3] ++ [4,5,6,7] =
+      [1,2,3,4,5,6,7]
+     */
+    @tailrec
+    def merge(listA: RList[S], listB: RList[S], accumulator: RList[S]): RList[S] = {
+      if (listA.isEmpty) accumulator.reverse ++ listB
+      else if (listB.isEmpty) accumulator.reverse ++ listA
+      else if (ordering.lteq(listA.head, listB.head)) merge(listA.tail, listB, listA.head :: accumulator)
+      else merge(listA, listB.tail, listB.head :: accumulator)
+    }
+    /*
+      [3,1,2,5,4] => [[3],[1],[2],[5],[4]]
+      mst([[3],[1],[2],[5],[4]], []) =
+      = mst([[2],[5],[4]], [[1,3]])
+      = mst([[4]], [[2,5], [1,3]])
+      = mst([], [[4], [2,5], [1,3]]) =
+      = mst([[4], [2,5], [1,3]], [])
+      = mst([[1,3]], [[2,4,5]])
+      = mst([], [[1,3], [2,4,5]])
+      = mst([[1,3], [2,4,5]], [])
+      = mst([], [[1,2,3,4,5]])
+      = [1,2,3,4,5]
+      Complexity: O(n * log(n))
+      complexity(n) = 2 * complexity(n/2) + n
+     */
+
+
+
+
+
+  }
+
+
+
 
 
 
