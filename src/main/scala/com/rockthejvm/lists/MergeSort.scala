@@ -206,14 +206,24 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
       Complexity: O(n * log(n))
       complexity(n) = 2 * complexity(n/2) + n
      */
+    def mergeSortTailrec(smallLists: RList[RList[S]], bigLists: RList[RList[S]]): RList[S] = {
+      if (smallLists.isEmpty) {
+        if (bigLists.isEmpty) RNil
+        else if (bigLists.tail.isEmpty) bigLists.head
+        else mergeSortTailrec(bigLists, RNil)
+      } else if (smallLists.tail.isEmpty) {
+        if (bigLists.isEmpty) smallLists.head
+        else mergeSortTailrec(smallLists.head :: bigLists, RNil)
+      } else {
+        val first = smallLists.head
+        val second = smallLists.tail.head
+        val merged = merge(first, second, RNil)
+        mergeSortTailrec(smallLists.tail.tail, merged :: bigLists)
+      }
+    }
 
-
-
-
-
+    mergeSortTailrec(this.map(x => x :: RNil), RNil)
   }
-
-
 
 
 
@@ -222,5 +232,23 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
 
 
 object MergeSort extends App {
+
+  val aSmallList = 1 :: 2 :: 3 :: RNil // RNil.::(3).::(2).::(1)
+  val aLargeList = RList.from(1 to 10000)
+  val oneToTen = RList.from(1 to 10)
+
+
+  // hard stuff
+  def testHardFunctions() = {
+    val anUnorderedList = 3 :: 1 :: 2 :: 4 :: 5 :: RNil
+    val ordering = Ordering.fromLessThan[Int](_ < _)
+    val listToSort = aLargeList.sample(10)
+
+    // merge sort
+    println(listToSort.mergeSort(ordering))
+  }
+
+
+
 
 }
