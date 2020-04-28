@@ -617,7 +617,6 @@ object QuickSort extends App {
     println(listToSort.quickSort(ordering))
   }
 
-
   testHardFunctions()
 
 
