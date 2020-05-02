@@ -14,5 +14,6 @@ object NumberProblems extends App {
     isPrimeTailrec(2)
   }
 
+
 }
 
