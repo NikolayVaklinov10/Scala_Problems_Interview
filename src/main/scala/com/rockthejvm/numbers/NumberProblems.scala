@@ -14,6 +14,11 @@ object NumberProblems extends App {
     isPrimeTailrec(2)
   }
 
+  println(isPrime(2))
+  println(isPrime(15))
+  println(isPrime(2003))
+  println(isPrime(23352352))
+
 
 }
 
