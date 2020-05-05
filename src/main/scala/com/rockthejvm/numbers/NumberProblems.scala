@@ -19,6 +19,7 @@ object NumberProblems extends App {
   println(isPrime(2003))
   println(isPrime(23352352))
   println(isPrime(453453453))
+  println(isPrime(1))
 
 
 }
