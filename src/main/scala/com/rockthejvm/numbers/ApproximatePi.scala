@@ -17,6 +17,7 @@ object ApproximatePi extends App {
 
     nPointsInsdeCircle * 4.0 / nPoints // approximation of PI
   }
+  println(s"Reference: ${Math.PI}")
   println(approximatePi(1000))
   println(approximatePi(10000))
 
