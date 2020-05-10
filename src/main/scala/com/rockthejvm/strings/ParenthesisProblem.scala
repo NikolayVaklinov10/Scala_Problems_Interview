@@ -64,6 +64,13 @@ object ParenthesisProblem extends App {
     else genParensTailrec(n-1, Set("()")).toList
   }
 
+  def testGenParens() = {
+    println(generateAllValidParentheses(1))
+    println(generateAllValidParentheses(2))
+    println(generateAllValidParentheses(3))
+    println(generateAllValidParentheses(10))
+  }
+
   def testValidParentheses() = {
     println(hasValidParentheses("()"))
     println(hasValidParentheses(")("))
