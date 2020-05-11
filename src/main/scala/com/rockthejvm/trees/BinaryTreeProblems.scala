@@ -71,6 +71,9 @@ case class BNode[+T](override val value: T, override val left: BTree[T], overrid
     collectLeavesTailrec(List(this), List())
   }
 
+  override def leafCount: Int = collectLeaves.length
+
+
 
 
 }
