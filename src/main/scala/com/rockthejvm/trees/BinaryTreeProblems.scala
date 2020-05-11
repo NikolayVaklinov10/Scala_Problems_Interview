@@ -1,5 +1,7 @@
 package com.rockthejvm.trees
 
+import scala.annotation.tailrec
+
 seal abstract class BTree[+T]{
   def value: T
   def left: BTree[T]
@@ -58,6 +60,7 @@ case class BNode[+T](override val value: T, override val left: BTree[T], overrid
        clt([], [8,7,5,3]) =
        [8,7,5,3]
      */
+    @tailrec
     def collectLeavesTailrec(todo: List[BTree[T]], leaves: List[BTree[T]]): List[BTree[T]] = {
       if (todo.isEmpty) leaves
       else if (todo.isEmpty) collectLeavesTailrec(todo.tail, leaves)
