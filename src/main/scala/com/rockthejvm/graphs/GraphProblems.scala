@@ -1,5 +1,6 @@
 package com.rockthejvm.graphs
 
+import scala.annotation.tailrec
 
 
 object GraphProblems extends App {
@@ -28,6 +29,26 @@ object GraphProblems extends App {
   def inDegree[T](graph: Graph[T], node: T): Int = {
     graph.values.count(_.contains(node))
   }
+
+  /**
+   * Medium difficulty problems
+   */
+
+    def isPath[T](graph: Graph[T], start: T, end: T):Boolean = {
+      @tailrec
+      def isPathTailrec(remaining: List[T], consideredNodes: Set[T]): Boolean = {
+        if (remaining.isEmpty) false
+        else {
+          val node = remaining.head
+          if (node == end) true
+          else if (consideredNodes.contains(node)) isPathTailrec(remaining.tail, consideredNodes)
+          else isPathTailrec(remaining.tail ++ graph(node), consideredNodes + node)
+        }
+      }
+
+      isPathTailrec(List(start), Set())
+    }
+
 
   def testDegrees(): Unit = {
     println(outDegree(socialNetwork, "Alice")) // 3
