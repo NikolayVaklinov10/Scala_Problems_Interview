@@ -2,7 +2,7 @@ package com.rockthejvm.trees
 
 import scala.annotation.tailrec
 
-seal abstract class BTree[+T]{
+sealed abstract class BTree[+T]{
   def value: T
   def left: BTree[T]
   def right: BTree[T]
@@ -26,6 +26,9 @@ seal abstract class BTree[+T]{
   def collectNodes(level: Int): List[BTree[T]]
 
   def mirror: BTree[T]
+
+  // compare the shape of two trees
+  def sameShapeAs[S >: T](that: BTree[S]): Boolean
 }
 
 case object BEnd extends BTree[Nothing]{
@@ -52,6 +55,9 @@ case object BEnd extends BTree[Nothing]{
 
   // mirror
   override def mirror: BTree[Nothing] = BEnd
+
+  // compare the shape of two trees
+  override def sameShapeAs[S >: Nothing](that: BTree[S]): Boolean = that.isEmpty
 
 
 }
@@ -129,25 +135,69 @@ case class BNode[+T](override val value: T, override val left: BTree[T], overrid
 
   // mirror or swap children inside the tree
   override def mirror: BTree[T] = {
-  @tailrec
-  def mirrorTailrec(todo: List[BTree[T]], expanded: Set[BTree[T]], done: List[BTree[T]]): BTree[T] = {
-    if (todo.isEmpty) done.head
-    else {
-      val node = todo.head
-      if (node.isEmpty || node.isLeaf) {
-        mirrorTailrec(todo.tail, expanded, node :: done)
-      } else if (!expanded.contains(node)) {
-        mirrorTailrec(node.left :: node.right :: todo, expanded + node, done)
-      } else {
-        val newLeft = done.head
-        val newRight = done.tail.head
-        val newNode = BNode(node.value, newLeft, newRight)
-        mirrorTailrec(todo.tail, expanded, newNode :: done.drop(2))
+    @tailrec
+    def mirrorTailrec(todo: List[BTree[T]], expanded: Set[BTree[T]], done: List[BTree[T]]): BTree[T] = {
+      if (todo.isEmpty) done.head
+      else {
+        val node = todo.head
+        if (node.isEmpty || node.isLeaf) {
+          mirrorTailrec(todo.tail, expanded, node :: done)
+        } else if (!expanded.contains(node)) {
+          mirrorTailrec(node.left :: node.right :: todo, expanded + node, done)
+        } else {
+          val newLeft = done.head
+          val newRight = done.tail.head
+          val newNode = BNode(node.value, newLeft, newRight)
+          mirrorTailrec(todo.tail, expanded, newNode :: done.drop(2))
+        }
       }
     }
+
+    mirrorTailrec(List(this), Set(), List())
   }
 
-  mirrorTailrec(List(this), Set(), List())
+  override def sameShapeAs[S >: T](that: BTree[S]): Boolean = {
+    /*
+        _____1_____                     _____8_____
+       /           \                   /           \
+     __2__       __6__       ~~      __9__       __2__
+    /     \     /     \             /     \     /     \
+    3     4     7     8             1     3     2     7
+           \                               \
+            5                               4
+        sst([1], [8]) =
+        sst([2,6], [9,2]) =
+        sst([3,4,6], [1,3,2]) =
+        sst([4,6],[3,2]) =
+        sst([End, 5, 6], [End, 4, 2]) =
+        sst([5,6], [4,2]) =
+        sst([6], [2]) =
+        sst([7,8], [2,7]) =
+        sst([8], [7]) =
+        sst([], []) =
+        true
+        Complexity: O(max(N1, N2))
+     */
+    @tailrec
+    def sameShapeAsTailrec(thisRemaining: List[BTree[S]], thatRemaining: List[BTree[S]]): Boolean = {
+      if (thisRemaining.isEmpty) thatRemaining.isEmpty
+      else if (thatRemaining.isEmpty) thisRemaining.isEmpty
+      else {
+        val thisNode = thisRemaining.head
+        val thatNode = thatRemaining.head
+
+        if (thisNode.isEmpty) thatNode.isEmpty && sameShapeAsTailrec(thisRemaining.tail, thatRemaining.tail)
+        else if (thisNode.isLeaf) thatNode.isLeaf && sameShapeAsTailrec(thisRemaining.tail, thatRemaining.tail)
+        else sameShapeAsTailrec(
+          thisNode.left :: thisNode.right :: thisRemaining.tail,
+          thatNode.left :: thatNode.right :: thatRemaining.tail
+        )
+      }
+    }
+
+    sameShapeAsTailrec(List(this), List(that))
+  }
+
 
 
 }
@@ -214,5 +264,9 @@ object BinaryTreeProblems extends App {
   println(tree.collectNodes(0).map(_.value))
   println(tree.collectNodes(2).map(_.value))
   println(tree.collectNodes(6473).map(_.value))
+
+  // same shape as
+  println(tree.sameShapeAs(tree10x))
+  println(tree.sameShapeAs(tree10xExtra))
 
 }
