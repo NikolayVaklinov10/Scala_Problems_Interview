@@ -29,6 +29,9 @@ sealed abstract class BTree[+T]{
 
   // compare the shape of two trees
   def sameShapeAs[S >: T](that: BTree[S]): Boolean
+
+  // summary
+  def isSymmetrical: Boolean
 }
 
 case object BEnd extends BTree[Nothing]{
@@ -58,6 +61,8 @@ case object BEnd extends BTree[Nothing]{
 
   // compare the shape of two trees
   override def sameShapeAs[S >: Nothing](that: BTree[S]): Boolean = that.isEmpty
+
+  override def isSymmetrical: Boolean = true
 
 
 }
@@ -198,6 +203,9 @@ case class BNode[+T](override val value: T, override val left: BTree[T], overrid
     sameShapeAsTailrec(List(this), List(that))
   }
 
+  // summary
+  override def isSymmetrical: Boolean = sameShapeAs(this.mirror)
+
 
 
 }
@@ -268,5 +276,8 @@ object BinaryTreeProblems extends App {
   // same shape as
   println(tree.sameShapeAs(tree10x))
   println(tree.sameShapeAs(tree10xExtra))
+
+  // symmetry
+  println(tree10xExtra.isSymmetrical)
 
 }
