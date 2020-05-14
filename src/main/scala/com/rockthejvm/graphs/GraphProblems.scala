@@ -49,10 +49,36 @@ object GraphProblems extends App {
       isPathTailrec(List(start), Set())
     }
 
+    def findPath[T](graph: Graph[T], start: T, end: T): List[T] = {
 
+      def findPathTailrec(remaining: List[(T, List[T])], consideredNodes: Set[T]): List[T] = {
+        if (remaining.isEmpty) List()
+        else {
+          val (node, currentPath) = remaining.head
+          if (node == end) currentPath.reverse
+          else if (consideredNodes.contains(node)) findPathTailrec(remaining.tail, consideredNodes)
+          else {
+            val neighbours = graph(node)
+            val tuples = neighbours.map(n => (n, n :: currentPath))
+            findPathTailrec(remaining.tail ++ tuples, consideredNodes + node)
+          }
+        }
+      }
+      findPathTailrec(List((start, List(start))), Set())
+    }
+
+
+  // testing the degrees two function code
   def testDegrees(): Unit = {
     println(outDegree(socialNetwork, "Alice")) // 3
     println(inDegree(socialNetwork, "David")) // 2
+  }
+
+  // testing the findPath code
+  def testFindPath(): Unit = {
+    println(findPath(socialNetwork, "Charlie", "Mary"))
+    println(findPath(socialNetwork, "Alice", "Mary"))
+    println(findPath(socialNetwork, "Bob", "Mary"))
   }
 
 
