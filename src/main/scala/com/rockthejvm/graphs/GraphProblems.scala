@@ -51,6 +51,7 @@ object GraphProblems extends App {
 
     def findPath[T](graph: Graph[T], start: T, end: T): List[T] = {
 
+      @tailrec
       def findPathTailrec(remaining: List[(T, List[T])], consideredNodes: Set[T]): List[T] = {
         if (remaining.isEmpty) List()
         else {
@@ -67,6 +68,8 @@ object GraphProblems extends App {
       findPathTailrec(List((start, List(start))), Set())
     }
 
+  def findCycle[T](graph: Graph[T], node: T): List[T] = findPath(graph, node, node)
+
 
   // testing the degrees two function code
   def testDegrees(): Unit = {
@@ -79,6 +82,11 @@ object GraphProblems extends App {
     println(findPath(socialNetwork, "Charlie", "Mary"))
     println(findPath(socialNetwork, "Alice", "Mary"))
     println(findPath(socialNetwork, "Bob", "Mary"))
+  }
+
+  // testing the cycle function
+  def testCycles(): Unit = {
+    println(findCycle(socialNetwork, "Alice")) // List
   }
 
 
