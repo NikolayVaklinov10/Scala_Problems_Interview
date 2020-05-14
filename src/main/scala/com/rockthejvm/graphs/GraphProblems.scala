@@ -70,6 +70,35 @@ object GraphProblems extends App {
 
   def findCycle[T](graph: Graph[T], node: T): List[T] = findPath(graph, node, node)
 
+  def makeUndirected[T](graph: Graph[T]): Graph[T] = {
+    def addEdge(graph: Graph[T], from: T, to: T): Graph[T] = {
+      if (!graph.contains(from)) graph + (from -> Set(to))
+      else {
+        val neighbors = graph(from)
+        graph + (from -> (neighbors + to))
+      }
+    }
+
+    @tailrec
+    def addOpposingEdges(remainingNodes: Set[T], accumulator: Graph[T]): Graph[T] = {
+      if (remainingNodes.isEmpty) accumulator
+      else {
+        val node = remainingNodes.head
+        val neighbors = graph(node)
+        val newGraph = neighbors.foldLeft(accumulator)((intermediateGraph, neighbor) => addEdge(intermediateGraph, neighbor, node))
+        addOpposingEdges(remainingNodes.tail, newGraph)
+      }
+    }
+
+    addOpposingEdges(graph.keySet, graph)
+  }
+
+  def testUndirected(): Unit = {
+    val undirectedNetwork = makeUndirected(socialNetwork)
+    println(undirectedNetwork("Bob"))
+    println(undirectedNetwork("Alice"))
+    println(undirectedNetwork("David"))
+  }
 
   // testing the degrees two function code
   def testDegrees(): Unit = {
