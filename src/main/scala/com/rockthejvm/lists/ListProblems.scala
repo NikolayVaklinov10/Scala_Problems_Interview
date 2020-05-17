@@ -2,6 +2,8 @@ package com.rockthejvm.lists
 
 import scala.annotation.tailrec
 
+// exploring the code
+
 sealed abstract class RList[+T] {
   def head: T
   def tail: RList[T]
