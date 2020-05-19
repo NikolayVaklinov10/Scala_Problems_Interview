@@ -19,6 +19,7 @@ case object RNil extends RList[Nothing] {
 
   override def toString: String = "[]"
 }
+// the constructor and prepend method both have :: signature
 
 case class ::[+T](override val head: T, override val tail: RList[T]) extends RList[T]{
   override def isEmpty: Boolean = false
