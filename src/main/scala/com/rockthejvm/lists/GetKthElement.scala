@@ -2,6 +2,7 @@ package com.rockthejvm.lists
 
 import scala.annotation.tailrec
 
+// further exploring the k-th problem
 sealed abstract class RList[+T] {
   def head: T
   def tail: RList[T]
