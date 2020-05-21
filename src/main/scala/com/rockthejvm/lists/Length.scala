@@ -25,6 +25,8 @@ case object RNil extends RList[Nothing] {
 case class ::[+T](override val head: T, override val tail: RList[T]) extends RList[T] {
   override def isEmpty: Boolean = false
 
+
+  // the length code
   override def length: Int = {
     @tailrec
     def lengthTailrec(remaining: RList[T], accumulator: Int): Int = {
