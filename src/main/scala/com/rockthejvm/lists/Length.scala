@@ -12,6 +12,7 @@ sealed abstract class RList[+T] {
   def length: Int
 }
 
+
 case object RNil extends RList[Nothing] {
   override def head: Nothing = throw new NoSuchElementException
   override def tail: RList[Nothing] = throw new NoSuchElementException
