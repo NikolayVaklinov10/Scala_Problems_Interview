@@ -44,6 +44,7 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     "[" + toStringTailrec(this, "") + "]"
   }
 
+
   override def reverse: RList[T] = {
     def reverseTailrec(remainingList: RList[T], result: RList[T]): RList[T] = {
       if (remainingList.isEmpty) result
