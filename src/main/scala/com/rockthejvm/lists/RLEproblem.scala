@@ -21,6 +21,8 @@ case object RNil extends RList[Nothing] {
   override def tail: RList[Nothing] = throw new NoSuchElementException
   override def isEmpty: Boolean = true
 
+  override def ::[S >: Nothing](elem: S): RList[S] = ???
+
   override def toString: String = "[]"
 
   /**
@@ -28,6 +30,8 @@ case object RNil extends RList[Nothing] {
    */
   // run-length encoding
   override def rle: RList[(Nothing, Int)] = RNil
+
+  override def reverse: RList[Nothing] = RNil
 }
 
 case class ::[+T](override val head: T, override val tail: RList[T]) extends RList[T]{
