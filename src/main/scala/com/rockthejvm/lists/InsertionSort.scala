@@ -87,6 +87,15 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     lengthTailrec(this,0)
   }
 
+  override def reverse: RList[T] = {
+    def reverseTailrec(remainingList: RList[T], result: RList[T]): RList[T] = {
+      if (remainingList.isEmpty) result
+      else reverseTailrec(remainingList.tail, remainingList.head :: result)
+    }
+
+    reverseTailrec(this, RNil)
+  }
+
 
   // random samples
   override def sample(k: Int): RList[T] = {
