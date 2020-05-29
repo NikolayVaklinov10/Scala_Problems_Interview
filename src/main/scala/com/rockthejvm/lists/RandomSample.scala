@@ -60,6 +60,8 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     else applyTailrec(this, 0)
   }
 
+  override def isEmpty: Boolean = false
+
 
   // random samples
   override def sample(k: Int): RList[T] = {
@@ -92,6 +94,16 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
 
     if (k < 0) RNil
     else sampleElegant
+  }
+
+  // the length code
+  override def length: Int = {
+    @tailrec
+    def lengthTailrec(remaining: RList[T], accumulator: Int): Int = {
+      if (remaining.isEmpty) accumulator
+      else lengthTailrec(remaining.tail, accumulator + 1)
+    }
+    lengthTailrec(this,0)
   }
 }
 
