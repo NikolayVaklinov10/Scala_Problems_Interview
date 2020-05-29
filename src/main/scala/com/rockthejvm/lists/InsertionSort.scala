@@ -18,6 +18,12 @@ sealed abstract class RList[+T]{
   // random sample
   def sample(k: Int): RList[T]
 
+  // reverse the list
+  def reverse: RList[T]
+
+  // concatenate another list in this one
+  def ++[S >: T](anotherList: RList[S]): RList[S]
+
   // sorting the list in the order defined by the Ordering object
   def sorted[S >: T](ordering: Ordering[S]): RList[S]
 }
@@ -37,8 +43,13 @@ case object RNil extends RList[Nothing] {
   // the size of the list
   override def length: Int = 0
 
+  override def reverse: RList[Nothing] = RNil
+
   // random samples
   override def sample(k: Int): RList[Nothing] = RNil
+
+  // append another list
+  override def ++[S >: Nothing](anotherList: RList[S]): RList[S] = anotherList
 
   // sorting the list in the order defined by the Ordering object
   override def sorted[S >: Nothing](ordering: Ordering[S]): RList[S] = RNil
@@ -64,6 +75,16 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
 
     if (index < 0) throw new NoSuchElementException
     else applyTailrec(this, 0)
+  }
+
+  // the length code
+  override def length: Int = {
+    @tailrec
+    def lengthTailrec(remaining: RList[T], accumulator: Int): Int = {
+      if (remaining.isEmpty) accumulator
+      else lengthTailrec(remaining.tail, accumulator + 1)
+    }
+    lengthTailrec(this,0)
   }
 
 
@@ -98,6 +119,15 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
 
     if (k < 0) RNil
     else sampleElegant
+  }
+
+  // reverse this list into a new list
+  override def ++[S >: T](anotherList: RList[S]): RList[S] = {
+    def concatTailrec(remainingList: RList[S], acc:RList[S]): RList[S] = {
+      if (remainingList.isEmpty) acc
+      else concatTailrec(remainingList.tail, remainingList.head :: acc)
+    }
+    concatTailrec(anotherList, this.reverse).reverse
   }
 
   /**
