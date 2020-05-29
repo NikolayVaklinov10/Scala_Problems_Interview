@@ -77,6 +77,8 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     else applyTailrec(this, 0)
   }
 
+  override def isEmpty: Boolean = false
+
   // the length code
   override def length: Int = {
     @tailrec
@@ -195,7 +197,7 @@ object InsertionSort extends App {
 
     // insertion sort
     println(anUnorderedList.sorted(ordering))
-    println(aLargeList.sample(10).sorted(ordering))
+    //println(aLargeList.sample(10).sorted(ordering))
 
   }
 
