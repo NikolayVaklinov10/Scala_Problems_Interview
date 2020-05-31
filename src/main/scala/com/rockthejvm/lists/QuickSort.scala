@@ -566,6 +566,7 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
       Complexity: O(N^2) in the worst case (when the list is sorted)
       on average O(N * log(N))
      */
+
     @tailrec
     def quickSortTailrec(remainingLists: RList[RList[T]], accumulator: RList[RList[T]]): RList[T] = {
       if (remainingLists.isEmpty) accumulator.flatMap(smallList => smallList).reverse
