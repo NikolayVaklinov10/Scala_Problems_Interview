@@ -191,6 +191,7 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
       else if (ordering.lteq(listA.head, listB.head)) merge(listA.tail, listB, listA.head :: accumulator)
       else merge(listA, listB.tail, listB.head :: accumulator)
     }
+
     /*
       [3,1,2,5,4] => [[3],[1],[2],[5],[4]]
       mst([[3],[1],[2],[5],[4]], []) =
