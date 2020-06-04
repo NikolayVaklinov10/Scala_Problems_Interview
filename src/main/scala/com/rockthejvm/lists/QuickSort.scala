@@ -531,6 +531,7 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
     mergeSortTailrec(this.map(x => x :: RNil), RNil)
   }
 
+  //the quick sort code
   override def quickSort[S >: T](ordering: Ordering[S]): RList[S] = {
     /*
       partition([1,2,5,4], 3, [], []) =
