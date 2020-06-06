@@ -541,7 +541,7 @@ case class ::[+T](override val head: T, override val tail: RList[T]) extends RLi
       partition([], 3, [2,1], [4,5])
       = ([2,1], [4,5])
      */
-    
+
     @tailrec
     def partition(list: RList[T], pivot: T, smaller: RList[T], larger: RList[T]): (RList[T], RList[T]) = {
       if (list.isEmpty) (smaller, larger)
