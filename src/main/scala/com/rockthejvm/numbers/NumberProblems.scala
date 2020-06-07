@@ -5,6 +5,7 @@ import scala.annotation.tailrec
 
 object NumberProblems extends App {
 
+
   def isPrime(n: Int): Boolean = {
     @tailrec
     def isPrimeTailrec(currentDivisor: Int): Boolean = {
