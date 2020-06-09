@@ -19,7 +19,6 @@ object NumberProblems extends App {
   def decompose(n: Int): List[Int] = {
     assert(n > 0)
 
-
     @tailrec
     def decomposeTailrec(remaining: Int, currentDivisor: Int, accumulator: List[Int]): List[Int] = {
       if (currentDivisor > Math.sqrt(n)) remaining :: accumulator
