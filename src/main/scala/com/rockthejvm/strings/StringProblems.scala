@@ -5,6 +5,7 @@ import scala.annotation.tailrec
 
 object StringProblems extends App {
 
+  
 
   def countCharacters(s: String): Map[Char, Int] = {
     @tailrec
