@@ -7,6 +7,7 @@ object StringProblems extends App {
 
 
   def countCharacters(s: String): Map[Char, Int] = {
+
     @tailrec
     def countCharactersTailrec(remaining: String, acc: Map[Char, Int]): Map[Char, Int] =
       if (remaining.isEmpty) acc
