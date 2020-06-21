@@ -25,6 +25,7 @@ object ParenthesisProblem extends App {
      Complexity: O(n)
      */
 
+    // the valid parenthesis problem
     @tailrec
     def validParensTailrec(remaining: String, openParens: Int): Boolean = {
       if (remaining.isEmpty) openParens == 0
