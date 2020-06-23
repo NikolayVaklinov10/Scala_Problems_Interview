@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 
 object ParenthesisProblem extends App {
 
+
   /*
   "()" => true
   "()()" => true
